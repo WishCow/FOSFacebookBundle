@@ -87,6 +87,20 @@ class FacebookHelper extends Helper
         return $this->facebook->getLogoutUrl($parameters);
     }
 
+    public function loginUrl($parameters = array())
+    {
+        if (!isset($parameters['scope'])) {
+            $parameters['scope'] = implode(',', $this->scope);
+        }
+
+        // // todo: default to the configured check_path
+        // if (!isset($parameters['redirect_uri'])) {
+        //     $parameters['redirect_uri'] =
+        // }
+
+        return $this->facebook->getLoginUrl($parameters);
+    }
+
     /**
      * @codeCoverageIgnore
      */

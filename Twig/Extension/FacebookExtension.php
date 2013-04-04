@@ -36,9 +36,10 @@ class FacebookExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'facebook_initialize' => new \Twig_Function_Method($this, 'renderInitialize', array('is_safe' => array('html'))),
+            'facebook_initialize'   => new \Twig_Function_Method($this, 'renderInitialize', array('is_safe' => array('html'))),
             'facebook_login_button' => new \Twig_Function_Method($this, 'renderLoginButton', array('is_safe' => array('html'))),
             'facebook_logout_url' => new \Twig_Function_Method($this, 'renderLogoutUrl', array('is_safe' => array('html'))),
+            'facebook_login_url'    => new \Twig_Function_Method($this, 'getLoginUrl'),
         );
     }
 
@@ -66,6 +67,14 @@ class FacebookExtension extends \Twig_Extension
     public function renderLoginButton($parameters = array(), $name = null)
     {
         return $this->container->get('fos_facebook.helper')->loginButton($parameters, $name ?: 'FOSFacebookBundle::loginButton.html.twig');
+    }
+
+    /**
+     * @see FacebookHelper::loginUrl()
+     */
+    public function getLoginUrl($parameters = array())
+    {
+        return $this->container->get('fos_facebook.helper')->loginUrl($parameters);
     }
 
     /**
