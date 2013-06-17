@@ -1,5 +1,5 @@
 Additional Resources
-=================
+====================
 
 
 Avoiding redirect to Facebook login page
@@ -19,3 +19,5 @@ firewalls:
 ```
 
 When you set this option, any request not authenticated will be redirected to the default login page.
+
+Next: [Example Server-Side Facebook Login using Mobile Apps](4-example-server-side-facebook-login-using-mobile-apps.md)

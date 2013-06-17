@@ -6,7 +6,7 @@ If you still want to use the FOSUserBundle form login, add the "chain_provider" 
 >      providers:
 >        chain_provider:
 >           chain:
->               providers: [fos_user_bundle, my_fos_facebook_provider]
+>               providers: [fos_userbundle, my_fos_facebook_provider]
 >        fos_user_bundle: ...
 >        my_fos_facebook_provider: ...
 
@@ -103,17 +103,17 @@ to the provider id in the "provider" section in ```config.yml```:
         }
     }
 
-Finally one also needs to add getFacebookId() and setFBData() methods to the User model.
+Finally, one also needs to add getFacebookId() and setFBData() methods to the User model.
 The following example also adds "firstname" and "lastname" properties, using the Doctrine ORM:
 
     <?php
 
     namespace Acme\MyBundle\Entity;
 
-    use FOS\UserBundle\Entity\User as BaseUser;
+    use FOS\UserBundle\Entity\User as FOSBaseUser;
     use Doctrine\ORM\Mapping as ORM;
 
-    class User extends BaseUser
+    class User extends FOSBaseUser
     {
         /**
          * @var string
@@ -196,7 +196,6 @@ The following example also adds "firstname" and "lastname" properties, using the
         {
             $this->facebookId = $facebookId;
             $this->setUsername($facebookId);
-            $this->salt = '';
         }
 
         /**
@@ -227,3 +226,5 @@ The following example also adds "firstname" and "lastname" properties, using the
             }
         }
     }
+
+Next: [Additional resources](3-another-resources.md)

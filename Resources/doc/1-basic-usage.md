@@ -4,15 +4,15 @@ Basic usage
 
 1. Add the following lines in your composer.json:
 
-  ```yaml
+  ```json
   {
-    "require": {
-      "friendsofsymfony/facebook-bundle": "1.1.*"
-    }
+      "require": {
+        "friendsofsymfony/facebook-bundle": "1.2.*"
+      }
   }
   ```
 
-2. Run the composer to download the bundle
+2. Run the composer to download the bundle:
   ```bash
   $ php composer.phar update friendsofsymfony/facebook-bundle
   ```
@@ -101,7 +101,7 @@ Basic usage
         defaults: { _controller: AcmeDemoBundle:Welcome:index }
     ```
 
-7. Optionally define a custom user provider class and use it as the provider or define path for login
+7. Optionally define a custom user provider class and use it as the provider or define path for login:
   ```yaml
     # application/config/config.yml
     security:
@@ -131,7 +131,7 @@ Basic usage
                     server_url: "http://localhost/facebookApp/app_dev.php/"     
   ```
 
-8. Optionally use access control to secure specific URLs
+8. Optionally use access control to secure specific URLs:
 
     ```yaml
     # application/config/config.yml
@@ -184,7 +184,7 @@ Add the following code in one of your templates:
 {# inside a twig template #}
 {{ facebook_login_button({'autologoutlink': true}) }}
 ```
-If you want customize the the login button, you can set these parameters:
+If you want customize the login button, you can set these parameters:
 
   - label     : The text that shows in the button.
   - showFaces : Specifies whether to show faces underneath the Login button.
@@ -193,36 +193,14 @@ If you want customize the the login button, you can set these parameters:
   - scope     : A comma separated list of extended permissions.
   - registrationUrl : Registration page url. If the user has not registered for your site, they will be redirected to the URL you specify in the registrationUrl parameter.
   - size      : Different sized buttons: small, medium, large, xlarge (default: medium).
+  - onlogin   : Set a URL to be redirected after successful login
 
 
 Note that with this approach, only the login and connecting with Facebook will
-be handled. The step of logging in the user into your Symfony2 application
-still needs to be triggered. To do this you, will in most cases simply subscribe
+be handled. The step of logging in (and out) the user into your Symfony2 application
+still needs to be triggered. To do this you will in most cases simply subscribe
 to the `auth.statusChange` event and then redirect to the `check_path`:
-```html+jinja
-<script>
-    function goLogIn(){
-        window.location = "{{ path('_security_check') }}";
-    }
-    
-    function onFbInit() {
-        if (typeof(FB) != 'undefined' && FB != null ) {
-            FB.Event.subscribe('auth.statusChange', function(response) {
-                setTimeout(goLogIn, 500);
-            });
-        }
-    }
-</script>
-```  
-Note that we wait 500ms before redirecting to let the browser dealing with the 
-Facebook cookie. You can avoid this step, but you might get this error message:
-*"The Facebook user could not be retrieved from the session."*
 
-The `_security_check` route would need to point to a `/login_check` pattern
-to match the above configuration.
-
-Also, you need to trigger the logout action, so, using the same event (`auth.statusChange`), add a simple
-check for `response.session` to redirect to the `logout` route:
 ```html+jinja
 <script>
     function goLogIn(){
@@ -243,3 +221,16 @@ check for `response.session` to redirect to the `logout` route:
 </script>
 ```
 
+Note that we need to include this code before the initialization of the Facebook
+Javascript SDK Initialization in order to have the onFbInit() event listener
+correctly triggered (in this case between the beginning of the 'body' tag and
+the templating helper provided by this bundle)
+
+We wait 500ms before redirecting to let the browser deal with the Facebook cookie.
+You can avoid this step, but you might get this error message:
+*"The Facebook user could not be retrieved from the session."*
+
+The `_security_check` route would need to point to a `/login_check` pattern
+to match the above configuration.
+
+Next: [Integration with FOSUserBundle](2-integration-with-fosuserbundle.md)
